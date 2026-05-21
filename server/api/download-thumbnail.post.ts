@@ -24,7 +24,7 @@ export default defineEventHandler(async event => {
     format,
     downloadUrl: `/downloads/${body.thumbnailId}.${format}`,
     message: paid
-      ? 'Watermark-free download placeholder created.'
-      : 'Free preview download placeholder created with watermark.'
+      ? 'Watermark-free HD download placeholder created.'
+      : 'Watermarked preview download created. Complete payment to unlock HD without watermark.'
   }
 })

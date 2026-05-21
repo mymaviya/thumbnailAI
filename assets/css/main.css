@@ -7,16 +7,28 @@ html {
 }
 
 body {
-  @apply bg-slate-50 text-ink antialiased;
+  background-color: #f8fafc;
+  color: #111827;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .focus-ring {
-  @apply focus:outline-none focus:ring-4 focus:ring-coral/20 focus:border-coral;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.focus-ring:focus {
+  border-color: #ff4d5a;
+  box-shadow: 0 0 0 4px rgba(255, 77, 90, 0.2);
+  outline: none;
 }
 
 .thumbnail-frame {
   aspect-ratio: 16 / 9;
-  @apply overflow-hidden rounded-lg bg-slate-900 shadow-soft;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  background-color: #0f172a;
+  box-shadow: 0 18px 50px rgba(17, 24, 39, 0.12);
 }
 
 .watermark {

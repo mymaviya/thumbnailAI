@@ -3,7 +3,7 @@
     <PageHero
       eyebrow="AI-powered YouTube thumbnail studio"
       title="AI Thumbnail Maker"
-      description="Browse ready-made thumbnails, customize text and colors, generate fresh concepts with AI, and prepare payment-ready downloads without exposing your API key."
+      description="Browse ready-made thumbnails, customize text and colors, generate fresh concepts with AI, and prepare payment-ready downloads."
     >
       <template #actions>
         <NuxtLink to="/generate" class="rounded-md bg-coral px-5 py-3 font-black text-white hover:bg-red-500">Generate with AI</NuxtLink>
@@ -35,7 +35,7 @@
         <NuxtLink to="/templates" class="text-sm font-black text-coral hover:text-red-500">View all</NuxtLink>
       </div>
       <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <TemplateCard v-for="template in filteredTemplates.slice(0, 6)" :key="template.id" :template="template" @preview="selected = $event" @download="downloadTemplate" />
+        <TemplateCard v-for="template in filteredTemplates.slice(0, 6)" :key="template.id" :template="template" @preview="selected = $event" @download="unlockTemplate" />
       </div>
     </section>
 
@@ -50,7 +50,7 @@
       </div>
     </section>
 
-    <PreviewModal :template="selected" @close="selected = null" />
+    <PreviewModal :template="selected" @close="selected = null" @download="unlockTemplate" />
   </div>
 </template>
 
@@ -78,11 +78,12 @@ const filteredTemplates = computed(() => {
   )
 })
 
-const downloadTemplate = async (template: ThumbnailTemplate) => {
+const unlockTemplate = async (template: ThumbnailTemplate) => {
   await $fetch('/api/download-thumbnail', {
     method: 'POST',
     body: { thumbnailId: template.id, paid: false, format: 'png' }
   })
   store.addDownload({ id: template.id, title: template.title, paid: false })
+  await navigateTo(`/pricing?thumbnail=${template.id}&plan=single`)
 }
 </script>

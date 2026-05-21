@@ -5,6 +5,8 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   runtimeConfig: {
     openaiApiKey: process.env.OPENAI_API_KEY,
+    razorpayKeyId: process.env.RAZORPAY_KEY_ID,
+    razorpayKeySecret: process.env.RAZORPAY_KEY_SECRET,
     public: {
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://aithumbnailmaker.example.com',
       siteName: 'AI Thumbnail Maker'

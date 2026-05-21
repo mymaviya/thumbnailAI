@@ -14,10 +14,10 @@
         </select>
       </div>
       <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <TemplateCard v-for="template in visibleTemplates" :key="template.id" :template="template" @preview="selected = $event" @download="downloadTemplate" />
+        <TemplateCard v-for="template in visibleTemplates" :key="template.id" :template="template" @preview="selected = $event" @download="unlockTemplate" />
       </div>
     </section>
-    <PreviewModal :template="selected" @close="selected = null" />
+    <PreviewModal :template="selected" @close="selected = null" @download="unlockTemplate" />
   </div>
 </template>
 
@@ -36,8 +36,9 @@ const selected = ref<ThumbnailTemplate | null>(null)
 const store = useThumbnailStore()
 const visibleTemplates = computed(() => getTemplatesByCategory(category.value))
 
-const downloadTemplate = async (template: ThumbnailTemplate) => {
+const unlockTemplate = async (template: ThumbnailTemplate) => {
   await $fetch('/api/download-thumbnail', { method: 'POST', body: { thumbnailId: template.id, paid: false, format: 'png' } })
   store.addDownload({ id: template.id, title: template.title, paid: false })
+  await navigateTo(`/pricing?thumbnail=${template.id}&plan=single`)
 }
 </script>

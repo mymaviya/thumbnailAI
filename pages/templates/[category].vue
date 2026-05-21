@@ -10,13 +10,13 @@
         <CategoryPills />
       </div>
       <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <TemplateCard v-for="template in visibleTemplates" :key="template.id" :template="template" @preview="selected = $event" @download="downloadTemplate" />
+        <TemplateCard v-for="template in visibleTemplates" :key="template.id" :template="template" @preview="selected = $event" @download="unlockTemplate" />
       </div>
       <p v-if="!visibleTemplates.length" class="rounded-lg border border-slate-200 bg-white p-8 text-center font-bold text-slate-600">
         No templates found for this category yet.
       </p>
     </section>
-    <PreviewModal :template="selected" @close="selected = null" />
+    <PreviewModal :template="selected" @close="selected = null" @download="unlockTemplate" />
   </div>
 </template>
 
@@ -40,8 +40,9 @@ usePageSeo(
   `/templates/${String(route.params.category || '')}`
 )
 
-const downloadTemplate = async (template: ThumbnailTemplate) => {
+const unlockTemplate = async (template: ThumbnailTemplate) => {
   await $fetch('/api/download-thumbnail', { method: 'POST', body: { thumbnailId: template.id, paid: false, format: 'png' } })
   store.addDownload({ id: template.id, title: template.title, paid: false })
+  await navigateTo(`/pricing?thumbnail=${template.id}&plan=single`)
 }
 </script>

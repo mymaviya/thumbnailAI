@@ -7,7 +7,7 @@
           <h3 class="font-black text-ink">{{ template.title }}</h3>
           <p class="text-sm text-slate-500">{{ template.category }} thumbnail template</p>
         </div>
-        <span class="rounded bg-slate-100 px-2 py-1 text-sm font-black text-ink">${{ template.price }}</span>
+        <span class="rounded bg-slate-100 px-2 py-1 text-sm font-black text-ink">₹{{ template.price }}</span>
       </div>
       <div class="grid grid-cols-3 gap-2">
         <button class="rounded-md border border-slate-200 px-3 py-2 text-sm font-bold hover:border-coral hover:text-coral" @click="$emit('preview', template)">
@@ -17,7 +17,7 @@
           Customize
         </button>
         <button class="rounded-md bg-coral px-3 py-2 text-sm font-bold text-white hover:bg-red-500" @click="$emit('download', template)">
-          Download
+          HD Unlock
         </button>
       </div>
     </div>

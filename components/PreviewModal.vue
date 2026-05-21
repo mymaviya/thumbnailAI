@@ -7,9 +7,14 @@
           <h3 class="text-xl font-black">{{ template.title }}</h3>
           <p class="text-sm text-slate-500">Preview includes watermark. Paid download removes it.</p>
         </div>
-        <button class="rounded-md bg-ink px-4 py-2 text-sm font-bold text-white" @click="$emit('close')">
-          Close
-        </button>
+        <div class="flex gap-2">
+          <button class="rounded-md bg-coral px-4 py-2 text-sm font-bold text-white" @click="$emit('download', template)">
+            Unlock HD
+          </button>
+          <button class="rounded-md bg-ink px-4 py-2 text-sm font-bold text-white" @click="$emit('close')">
+            Close
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -19,5 +24,8 @@
 import type { ThumbnailTemplate } from '~/types/thumbnail'
 
 defineProps<{ template: ThumbnailTemplate | null }>()
-defineEmits<{ close: [] }>()
+defineEmits<{
+  close: []
+  download: [ThumbnailTemplate]
+}>()
 </script>

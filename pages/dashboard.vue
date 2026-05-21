@@ -25,10 +25,15 @@
         <h2 class="text-2xl font-black">My generated thumbnails</h2>
         <div class="mt-5 space-y-4">
           <article v-for="item in store.generated" :key="item.id" class="flex gap-4 rounded-lg border border-slate-200 p-3">
-            <img :src="item.imageUrl" :alt="item.title" class="h-20 w-32 rounded object-cover">
-            <div>
+            <div class="watermark relative h-20 w-32 overflow-hidden rounded">
+              <img :src="item.imageUrl" :alt="item.title" class="h-full w-full object-cover">
+            </div>
+            <div class="flex-1">
               <h3 class="font-black">{{ item.title }}</h3>
               <p class="text-sm text-slate-500">{{ item.category }} • {{ new Date(item.createdAt).toLocaleString() }}</p>
+              <NuxtLink :to="`/pricing?thumbnail=${item.id}&plan=single`" class="mt-2 inline-block rounded-md bg-coral px-3 py-2 text-xs font-black text-white">
+                Download HD
+              </NuxtLink>
             </div>
           </article>
           <p v-if="!store.generated.length" class="rounded-md bg-slate-50 p-4 text-sm font-semibold text-slate-600">Generated thumbnails will appear here.</p>
@@ -43,7 +48,7 @@
               <h3 class="font-black">{{ item.title }}</h3>
               <p class="text-sm text-slate-500">{{ new Date(item.downloadedAt).toLocaleString() }}</p>
             </div>
-            <span class="rounded bg-slate-100 px-2 py-1 text-xs font-black">{{ item.paid ? 'Paid' : 'Preview' }}</span>
+            <span class="rounded bg-slate-100 px-2 py-1 text-xs font-black">{{ item.paid ? 'Paid HD' : 'Watermarked preview' }}</span>
           </article>
           <p v-if="!store.downloads.length" class="rounded-md bg-slate-50 p-4 text-sm font-semibold text-slate-600">Download activity will appear here.</p>
         </div>

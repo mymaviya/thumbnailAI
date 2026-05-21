@@ -1,59 +1,214 @@
 <template>
   <div>
     <PageHero
-      eyebrow="Payment-ready downloads"
-      title="Simple pricing for creators and teams"
-      description="Free previews include a watermark. Paid downloads are wired through placeholder order logic for future Razorpay or Stripe integration."
+      eyebrow="HD downloads"
+      title="Unlock watermark-free thumbnails"
+      description="Generate or select a thumbnail, preview it with a watermark, then unlock HD downloads after payment."
     />
     <section class="mx-auto grid max-w-7xl gap-6 px-4 py-10 sm:px-6 lg:grid-cols-3 lg:px-8">
-      <article v-for="plan in plans" :key="plan.name" class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 class="text-xl font-black">{{ plan.name }}</h2>
-        <p class="mt-2 text-slate-600">{{ plan.description }}</p>
+      <article
+        v-for="plan in plans"
+        :key="plan.id"
+        class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm"
+      >
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <h2 class="text-xl font-black">{{ plan.name }}</h2>
+            <p class="mt-2 text-slate-600">{{ plan.description }}</p>
+          </div>
+          <span v-if="plan.badge" class="rounded bg-lemon px-2 py-1 text-xs font-black text-ink">{{ plan.badge }}</span>
+        </div>
         <p class="mt-6 text-4xl font-black">{{ plan.price }}</p>
         <ul class="mt-6 space-y-3 text-sm font-semibold text-slate-600">
           <li v-for="feature in plan.features" :key="feature">✓ {{ feature }}</li>
         </ul>
-        <button class="mt-6 w-full rounded-md bg-ink px-4 py-3 font-black text-white hover:bg-slate-700" @click="createOrder(plan.name)">
-          Choose {{ plan.name }}
+        <button
+          class="mt-6 w-full rounded-md bg-ink px-4 py-3 font-black text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
+          :disabled="loadingPlan === plan.id"
+          @click="payWithRazorpay(plan)"
+        >
+          {{ loadingPlan === plan.id ? 'Opening Razorpay...' : 'Pay and Unlock' }}
         </button>
       </article>
+    </section>
+
+    <section v-if="paymentStatus || paymentError" class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+      <p v-if="paymentStatus" class="rounded-md bg-emerald-50 p-4 text-sm font-bold text-emerald-700">{{ paymentStatus }}</p>
+      <p v-if="paymentError" class="rounded-md bg-red-50 p-4 text-sm font-bold text-red-700">{{ paymentError }}</p>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
+declare global {
+  interface Window {
+    Razorpay?: new (options: RazorpayOptions) => { open: () => void }
+  }
+}
+
+interface PricingPlan {
+  id: string
+  name: string
+  price: string
+  amount: number
+  description: string
+  badge?: string
+  features: string[]
+}
+
+interface RazorpayOrderResponse {
+  orderId: string
+  keyId: string
+  provider: string
+  plan: string
+  thumbnailId: string | null
+  amount: number
+  currency: string
+}
+
+interface RazorpayHandlerResponse {
+  razorpay_order_id: string
+  razorpay_payment_id: string
+  razorpay_signature: string
+}
+
+interface RazorpayOptions {
+  key: string
+  amount: number
+  currency: string
+  name: string
+  description: string
+  order_id: string
+  handler: (response: RazorpayHandlerResponse) => void
+  notes?: Record<string, string>
+  theme?: {
+    color?: string
+  }
+  modal?: {
+    ondismiss?: () => void
+  }
+}
+
 usePageSeo(
   'Pricing - AI Thumbnail Maker',
-  'Compare AI Thumbnail Maker preview, creator, and team plans with payment-ready download logic.',
+  'Unlock watermark-free HD thumbnail downloads with single, pack, and monthly pricing plans.',
   '/pricing'
 )
 
-const plans = [
+const route = useRoute()
+const store = useThumbnailStore()
+const selectedThumbnail = computed(() => String(route.query.thumbnail || 'selected-thumbnail'))
+const loadingPlan = ref('')
+const paymentStatus = ref('')
+const paymentError = ref('')
+
+const plans: PricingPlan[] = [
   {
-    name: 'Preview',
-    price: 'Free',
-    description: 'Create and test watermarked thumbnails.',
-    features: ['Watermarked previews', 'Template browsing', 'Basic editor access']
+    id: 'single',
+    name: 'Single Thumbnail',
+    price: '₹49',
+    amount: 49,
+    description: 'Best for one final YouTube upload.',
+    features: ['1 HD download', 'No watermark', 'PNG or JPG export']
   },
   {
-    name: 'Creator',
-    price: '$9/mo',
-    description: 'Download watermark-free thumbnails.',
-    features: ['No watermark downloads', 'AI generations', 'PNG and JPG export']
+    id: 'pack-5',
+    name: '5 Thumbnail Pack',
+    price: '₹99',
+    amount: 99,
+    description: 'For creators preparing a batch of videos.',
+    badge: 'Value',
+    features: ['5 HD downloads', 'No watermark', 'Use across templates or AI generations']
   },
   {
-    name: 'Studio',
-    price: '$29/mo',
-    description: 'For channels and production teams.',
-    features: ['Team dashboard', 'Bulk downloads', 'Priority generation queue']
+    id: 'monthly',
+    name: 'Monthly Unlimited',
+    price: '₹299 – ₹999',
+    amount: 299,
+    description: 'For regular creators and channel teams.',
+    features: ['Unlimited HD downloads', 'No watermark', 'Best for ongoing publishing']
   }
 ]
 
-const createOrder = async (plan: string) => {
-  const result = await $fetch<{ orderId: string; provider: string }>('/api/payment/create-order', {
-    method: 'POST',
-    body: { plan, amount: plan === 'Studio' ? 29 : plan === 'Creator' ? 9 : 0, currency: 'USD' }
-  })
-  window.alert(`Placeholder ${result.provider} order created: ${result.orderId}`)
+const loadRazorpayCheckout = () => new Promise<void>((resolve, reject) => {
+  if (window.Razorpay) {
+    resolve()
+    return
+  }
+
+  const script = document.createElement('script')
+  script.src = 'https://checkout.razorpay.com/v1/checkout.js'
+  script.onload = () => resolve()
+  script.onerror = () => reject(new Error('Unable to load Razorpay Checkout.'))
+  document.head.appendChild(script)
+})
+
+const payWithRazorpay = async (plan: PricingPlan) => {
+  loadingPlan.value = plan.id
+  paymentStatus.value = ''
+  paymentError.value = ''
+
+  try {
+    await loadRazorpayCheckout()
+    const order = await $fetch<RazorpayOrderResponse>('/api/payment/create-order', {
+      method: 'POST',
+      body: {
+        plan: plan.name,
+        amount: plan.amount,
+        currency: 'INR',
+        provider: 'razorpay',
+        thumbnailId: selectedThumbnail.value
+      }
+    })
+
+    const RazorpayCheckout = window.Razorpay
+    if (!RazorpayCheckout) {
+      throw new Error('Razorpay Checkout is unavailable.')
+    }
+
+    const checkout = new RazorpayCheckout({
+      key: order.keyId,
+      amount: order.amount,
+      currency: order.currency,
+      name: 'AI Thumbnail Maker',
+      description: `${plan.name} HD download`,
+      order_id: order.orderId,
+      notes: {
+        plan: plan.name,
+        thumbnailId: selectedThumbnail.value
+      },
+      theme: {
+        color: '#ff4d5a'
+      },
+      modal: {
+        ondismiss: () => {
+          loadingPlan.value = ''
+        }
+      },
+      handler: async response => {
+        try {
+          await $fetch('/api/payment/verify', {
+            method: 'POST',
+            body: {
+              ...response,
+              plan: plan.name,
+              thumbnailId: selectedThumbnail.value
+            }
+          })
+          store.addDownload({ id: selectedThumbnail.value, title: `${plan.name} HD download`, paid: true })
+          paymentStatus.value = 'Payment verified. Your watermark-free HD download is unlocked.'
+        } catch (error: any) {
+          paymentError.value = error?.data?.message || 'Payment could not be verified. Please contact support with your payment ID.'
+        } finally {
+          loadingPlan.value = ''
+        }
+      }
+    })
+
+    checkout.open()
+  } catch (error: any) {
+    paymentError.value = error?.data?.message || error?.message || 'Unable to start Razorpay payment.'
+    loadingPlan.value = ''
+  }
 }
 </script>

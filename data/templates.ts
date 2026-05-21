@@ -22,7 +22,7 @@ export const templates: ThumbnailTemplate[] = [
     headline: 'TOP 10 STUDY HACKS',
     subline: 'Exam-ready in 7 days',
     badge: 'Education',
-    price: 3
+    price: 49
   },
   {
     id: 'gaming-final-boss',
@@ -33,7 +33,7 @@ export const templates: ThumbnailTemplate[] = [
     headline: 'I FOUND THE FINAL BOSS',
     subline: 'Insane gameplay moment',
     badge: 'Gaming',
-    price: 5
+    price: 49
   },
   {
     id: 'news-breaking-angle',
@@ -44,7 +44,7 @@ export const templates: ThumbnailTemplate[] = [
     headline: 'BREAKING UPDATE',
     subline: 'What changed today?',
     badge: 'News',
-    price: 4
+    price: 39
   },
   {
     id: 'vlog-day-story',
@@ -55,7 +55,7 @@ export const templates: ThumbnailTemplate[] = [
     headline: 'A DAY IN MY LIFE',
     subline: 'Behind the scenes',
     badge: 'Vlog',
-    price: 3
+    price: 29
   },
   {
     id: 'business-growth',
@@ -66,7 +66,7 @@ export const templates: ThumbnailTemplate[] = [
     headline: '5X YOUR REVENUE',
     subline: 'Simple business framework',
     badge: 'Business',
-    price: 6
+    price: 49
   },
   {
     id: 'tech-ai-toolkit',
@@ -77,7 +77,7 @@ export const templates: ThumbnailTemplate[] = [
     headline: 'BEST AI TOOLS 2026',
     subline: 'Tested for creators',
     badge: 'Tech',
-    price: 5
+    price: 49
   },
   {
     id: 'islamic-reminder',
@@ -88,7 +88,7 @@ export const templates: ThumbnailTemplate[] = [
     headline: 'POWERFUL REMINDER',
     subline: 'Faith, focus, and peace',
     badge: 'Islamic',
-    price: 4
+    price: 39
   },
   {
     id: 'school-admission',
@@ -99,7 +99,7 @@ export const templates: ThumbnailTemplate[] = [
     headline: 'ADMISSIONS OPEN',
     subline: 'New session starts soon',
     badge: 'School',
-    price: 3
+    price: 29
   },
   {
     id: 'hospital-health',
@@ -110,7 +110,7 @@ export const templates: ThumbnailTemplate[] = [
     headline: 'DOCTOR EXPLAINS',
     subline: 'Health tips that matter',
     badge: 'Hospital',
-    price: 4
+    price: 39
   }
 ]
 
