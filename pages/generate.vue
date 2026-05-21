@@ -1,0 +1,103 @@
+<template>
+  <div>
+    <PageHero
+      eyebrow="AI generator"
+      title="Generate custom thumbnails from a video idea"
+      description="Describe your title, niche, colors, background, and visual emotion. The server route calls OpenAI with the private API key."
+    />
+    <section class="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
+      <form class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm" @submit.prevent="generate">
+        <div class="grid gap-4">
+          <label class="grid gap-2 font-bold">Video title
+            <input v-model="form.videoTitle" required class="focus-ring rounded-md border border-slate-300 px-4 py-3 font-semibold" placeholder="How AI changed my study routine">
+          </label>
+          <label class="grid gap-2 font-bold">Category
+            <select v-model="form.category" class="focus-ring rounded-md border border-slate-300 px-4 py-3">
+              <option v-for="category in categories" :key="category" :value="category">{{ category }}</option>
+            </select>
+          </label>
+          <label class="grid gap-2 font-bold">Main text
+            <input v-model="form.mainText" required class="focus-ring rounded-md border border-slate-300 px-4 py-3 font-semibold" placeholder="STUDY SMARTER">
+          </label>
+          <div class="grid gap-4 md:grid-cols-2">
+            <label class="grid gap-2 font-bold">Background style
+              <input v-model="form.backgroundStyle" class="focus-ring rounded-md border border-slate-300 px-4 py-3" placeholder="studio, classroom, cinematic">
+            </label>
+            <label class="grid gap-2 font-bold">Color theme
+              <input v-model="form.colorTheme" class="focus-ring rounded-md border border-slate-300 px-4 py-3" placeholder="red, yellow, black">
+            </label>
+          </div>
+          <label class="grid gap-2 font-bold">Emotion/style
+            <select v-model="form.emotion" class="focus-ring rounded-md border border-slate-300 px-4 py-3">
+              <option>professional</option>
+              <option>viral</option>
+              <option>bold</option>
+              <option>cinematic</option>
+            </select>
+          </label>
+          <button class="rounded-md bg-coral px-5 py-3 font-black text-white hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-60" :disabled="loading">
+            {{ loading ? 'Generating thumbnail...' : 'Generate Thumbnail' }}
+          </button>
+          <p v-if="error" class="rounded-md bg-red-50 p-3 text-sm font-semibold text-red-700">{{ error }}</p>
+        </div>
+      </form>
+
+      <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <div class="thumbnail-frame relative grid place-items-center">
+          <img v-if="generatedImage" :src="generatedImage" alt="Generated thumbnail preview" class="h-full w-full object-cover">
+          <div v-else class="absolute inset-0 bg-gradient-to-br from-skydeep via-coral to-ink" />
+          <div v-if="!generatedImage" class="relative max-w-lg px-8 text-center">
+            <p class="text-4xl font-black leading-none text-white">YOUR AI THUMBNAIL PREVIEW</p>
+            <p class="mt-4 rounded bg-lemon px-4 py-2 font-black text-ink">Generated result appears here</p>
+          </div>
+          <div v-if="loading" class="absolute inset-0 grid place-items-center bg-ink/70 text-lg font-black text-white">Creating image...</div>
+        </div>
+        <div class="mt-4 flex flex-wrap gap-3">
+          <NuxtLink to="/editor" class="rounded-md bg-ink px-4 py-2 text-sm font-bold text-white">Open Editor</NuxtLink>
+          <NuxtLink to="/dashboard" class="rounded-md border border-slate-300 px-4 py-2 text-sm font-bold text-ink">View Generated</NuxtLink>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { categories } from '~/data/templates'
+import type { GeneratedThumbnail, ThumbnailCategory } from '~/types/thumbnail'
+
+usePageSeo(
+  'AI Thumbnail Generator - AI Thumbnail Maker',
+  'Generate YouTube thumbnails using OpenAI image generation from titles, categories, styles, colors, and emotions.',
+  '/generate'
+)
+
+const store = useThumbnailStore()
+const loading = ref(false)
+const error = ref('')
+const generatedImage = ref('')
+const form = reactive({
+  videoTitle: '',
+  category: 'Education' as ThumbnailCategory,
+  mainText: '',
+  backgroundStyle: 'high-contrast creator studio',
+  colorTheme: 'red, yellow, black',
+  emotion: 'viral'
+})
+
+const generate = async () => {
+  loading.value = true
+  error.value = ''
+  try {
+    const result = await $fetch<GeneratedThumbnail>('/api/generate-thumbnail', {
+      method: 'POST',
+      body: form
+    })
+    generatedImage.value = result.imageUrl
+    store.saveGenerated(result)
+  } catch (event: any) {
+    error.value = event?.data?.message || 'Unable to generate thumbnail. Check your server API key and try again.'
+  } finally {
+    loading.value = false
+  }
+}
+</script>

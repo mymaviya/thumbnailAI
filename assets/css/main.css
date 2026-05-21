@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-slate-50 text-ink antialiased;
+}
+
+.focus-ring {
+  @apply focus:outline-none focus:ring-4 focus:ring-coral/20 focus:border-coral;
+}
+
+.thumbnail-frame {
+  aspect-ratio: 16 / 9;
+  @apply overflow-hidden rounded-lg bg-slate-900 shadow-soft;
+}
+
+.watermark {
+  background-image: repeating-linear-gradient(
+    -28deg,
+    rgba(255, 255, 255, 0.12) 0,
+    rgba(255, 255, 255, 0.12) 1px,
+    transparent 1px,
+    transparent 34px
+  );
+}
