@@ -31,6 +31,8 @@
           <NuxtLink to="/templates" class="hover:text-coral">Templates</NuxtLink>
           <NuxtLink to="/pricing" class="hover:text-coral">Pricing</NuxtLink>
           <NuxtLink to="/dashboard" class="hover:text-coral">Dashboard</NuxtLink>
+          <NuxtLink to="/privacy" class="hover:text-coral">Privacy</NuxtLink>
+          <NuxtLink to="/terms-and-conditions" class="hover:text-coral">Terms</NuxtLink>
         </div>
         <p class="md:text-right">Built for 1280x720 YouTube thumbnails.</p>
       </div>
