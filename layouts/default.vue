@@ -13,9 +13,14 @@
             {{ item.label }}
           </NuxtLink>
         </div>
-        <NuxtLink to="/generate" class="rounded-md bg-coral px-4 py-2 text-sm font-bold text-white shadow-sm hover:bg-red-500">
-          Generate
-        </NuxtLink>
+        <div class="flex items-center gap-2">
+          <NuxtLink to="/login" class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-bold text-ink shadow-sm hover:border-coral hover:text-coral">
+            Login
+          </NuxtLink>
+          <NuxtLink to="/generate" class="rounded-md bg-coral px-4 py-2 text-sm font-bold text-white shadow-sm hover:bg-red-500">
+            Generate
+          </NuxtLink>
+        </div>
       </nav>
     </header>
     <main>
@@ -49,6 +54,7 @@ const navItems = [
   { to: '/generate', label: 'AI Generator' },
   { to: '/editor', label: 'Editor' },
   { to: '/pricing', label: 'Pricing' },
-  { to: '/dashboard', label: 'Dashboard' }
+  { to: '/dashboard', label: 'Dashboard' },
+  { to: '/login', label: 'Login' }
 ]
 </script>

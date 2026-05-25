@@ -2,33 +2,36 @@
   <div>
     <PageHero
       eyebrow="Account access"
-      title="Login or register"
-      description="A polished authentication UI ready to connect with your preferred auth provider."
+      title="Login with Google"
+      description="Use your Google account to generate thumbnails, manage payments, and download HD files securely."
     />
-    <section class="mx-auto grid max-w-5xl gap-6 px-4 py-10 sm:px-6 md:grid-cols-2 lg:px-8">
-      <form class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 class="text-2xl font-black">Login</h2>
-        <label class="mt-5 grid gap-2 font-bold">Email
-          <input type="email" class="focus-ring rounded-md border border-slate-300 px-4 py-3" placeholder="creator@example.com">
-        </label>
-        <label class="mt-4 grid gap-2 font-bold">Password
-          <input type="password" class="focus-ring rounded-md border border-slate-300 px-4 py-3" placeholder="••••••••">
-        </label>
-        <button class="mt-6 w-full rounded-md bg-coral px-4 py-3 font-black text-white">Login</button>
-      </form>
-      <form class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 class="text-2xl font-black">Register</h2>
-        <label class="mt-5 grid gap-2 font-bold">Name
-          <input class="focus-ring rounded-md border border-slate-300 px-4 py-3" placeholder="Channel owner">
-        </label>
-        <label class="mt-4 grid gap-2 font-bold">Email
-          <input type="email" class="focus-ring rounded-md border border-slate-300 px-4 py-3" placeholder="you@example.com">
-        </label>
-        <label class="mt-4 grid gap-2 font-bold">Password
-          <input type="password" class="focus-ring rounded-md border border-slate-300 px-4 py-3" placeholder="Create password">
-        </label>
-        <button class="mt-6 w-full rounded-md bg-ink px-4 py-3 font-black text-white">Create Account</button>
-      </form>
+
+    <section class="mx-auto max-w-xl px-4 py-12 sm:px-6 lg:px-8">
+      <div class="rounded-lg border border-slate-200 bg-white p-6 text-center shadow-sm sm:p-8">
+        <img v-if="user?.avatar" :src="user.avatar" alt="" class="mx-auto size-16 rounded-full object-cover">
+        <h2 class="mt-4 text-2xl font-black text-ink">{{ user ? `Signed in as ${user.name}` : 'Welcome back' }}</h2>
+        <p class="mt-3 leading-7 text-slate-600">
+          Google login keeps your generated thumbnails, payment status, and HD downloads tied to your account.
+        </p>
+
+        <div class="mt-6 grid gap-3">
+          <a
+            v-if="!user"
+            href="/api/auth/google"
+            class="inline-flex items-center justify-center gap-3 rounded-md border border-slate-300 bg-white px-5 py-3 font-black text-ink shadow-sm hover:border-coral hover:text-coral"
+          >
+            <span class="grid size-6 place-items-center rounded-full border border-slate-300 text-sm font-black">G</span>
+            Continue with Google
+          </a>
+          <NuxtLink
+            v-else
+            to="/dashboard"
+            class="rounded-md bg-coral px-5 py-3 font-black text-white hover:bg-red-500"
+          >
+            Go to Dashboard
+          </NuxtLink>
+        </div>
+      </div>
     </section>
   </div>
 </template>
@@ -36,7 +39,12 @@
 <script setup lang="ts">
 usePageSeo(
   'Login - AI Thumbnail Maker',
-  'Login or register to manage generated thumbnails, downloads, and creator account settings.',
+  'Login with Google to manage generated thumbnails, paid downloads, and creator account settings.',
   '/login'
 )
+
+const { data } = await useFetch<{ user: any }>('/api/auth/me', {
+  credentials: 'include'
+})
+const user = computed(() => data.value?.user)
 </script>

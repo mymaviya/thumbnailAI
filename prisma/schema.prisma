@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  user
+  admin
+}
+
+enum ThumbnailStatus {
+  generated
+  paid
+  downloaded
+}
+
+enum PaymentStatus {
+  pending
+  paid
+  failed
+}
+
+enum PaymentRecordStatus {
+  created
+  paid
+  failed
+}
+
+model User {
+  id         String      @id @default(cuid())
+  name       String
+  email      String      @unique
+  googleId   String      @unique @map("google_id")
+  avatar     String?
+  role       UserRole    @default(user)
+  thumbnails Thumbnail[]
+  downloads  Download[]
+  payments   Payment[]
+  createdAt  DateTime    @default(now()) @map("created_at")
+  updatedAt  DateTime    @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Thumbnail {
+  id                  String          @id @default(cuid())
+  userId              String          @map("user_id")
+  title               String
+  prompt              String          @db.Text
+  category            String
+  imageUrl            String          @map("image_url")
+  watermarkedImageUrl String          @map("watermarked_image_url")
+  status              ThumbnailStatus @default(generated)
+  paymentStatus       PaymentStatus   @default(pending) @map("payment_status")
+  razorpayOrderId     String?         @map("razorpay_order_id")
+  razorpayPaymentId   String?         @map("razorpay_payment_id")
+  createdAt           DateTime        @default(now()) @map("created_at")
+  updatedAt           DateTime        @updatedAt @map("updated_at")
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  downloads Download[]
+  payments  Payment[]
+
+  @@index([userId])
+  @@index([razorpayOrderId])
+  @@index([razorpayPaymentId])
+  @@map("thumbnails")
+}
+
+model Download {
+  id           String    @id @default(cuid())
+  userId       String    @map("user_id")
+  thumbnailId  String    @map("thumbnail_id")
+  paymentId    String?   @unique @map("payment_id")
+  downloadUrl  String    @map("download_url")
+  downloadedAt DateTime? @map("downloaded_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  thumbnail Thumbnail @relation(fields: [thumbnailId], references: [id], onDelete: Cascade)
+  payment   Payment?  @relation(fields: [paymentId], references: [id], onDelete: SetNull)
+
+  @@unique([userId, thumbnailId])
+  @@index([thumbnailId])
+  @@map("downloads")
+}
+
+model Payment {
+  id                 String              @id @default(cuid())
+  userId             String              @map("user_id")
+  thumbnailId        String              @map("thumbnail_id")
+  amount             Int
+  currency           String              @default("INR")
+  status             PaymentRecordStatus @default(created)
+  razorpayOrderId    String              @unique @map("razorpay_order_id")
+  razorpayPaymentId  String?             @unique @map("razorpay_payment_id")
+  razorpaySignature  String?             @map("razorpay_signature")
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  thumbnail Thumbnail  @relation(fields: [thumbnailId], references: [id], onDelete: Cascade)
+  download  Download?
+
+  @@index([userId])
+  @@index([thumbnailId])
+  @@map("payments")
+}

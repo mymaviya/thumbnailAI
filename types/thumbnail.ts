@@ -27,5 +27,8 @@ export interface GeneratedThumbnail {
   category: ThumbnailCategory
   prompt: string
   imageUrl: string
+  watermarkedImageUrl?: string
+  status?: 'generated' | 'paid' | 'downloaded'
+  paymentStatus?: 'pending' | 'paid' | 'failed'
   createdAt: string
 }

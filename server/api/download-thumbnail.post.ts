@@ -17,14 +17,19 @@ export default defineEventHandler(async event => {
   const format = body.format || 'png'
   const paid = Boolean(body.paid)
 
+  if (paid) {
+    throw createError({
+      statusCode: 410,
+      statusMessage: 'Paid HD downloads must use the authenticated /api/downloads/:thumbnailId route.'
+    })
+  }
+
   return {
-    status: paid ? 'ready' : 'preview',
+    status: 'preview',
     thumbnailId: body.thumbnailId,
-    watermark: !paid,
+    watermark: true,
     format,
     downloadUrl: `/downloads/${body.thumbnailId}.${format}`,
-    message: paid
-      ? 'Watermark-free HD download placeholder created.'
-      : 'Watermarked preview download created. Complete payment to unlock HD without watermark.'
+    message: 'Watermarked preview download created. Complete payment to unlock HD without watermark.'
   }
 })

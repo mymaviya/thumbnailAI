@@ -63,11 +63,6 @@
         <div class="thumbnail-frame relative grid place-items-center">
           <img v-if="generatedImage" :src="generatedImage" alt="Generated thumbnail preview" class="h-full w-full object-cover">
           <div v-else class="absolute inset-0 bg-gradient-to-br from-skydeep via-coral to-ink" />
-          <div v-if="generatedImage" class="watermark absolute inset-0 grid place-items-center">
-            <span class="-rotate-12 rounded bg-black/45 px-5 py-2 text-sm font-black uppercase tracking-[0.2em] text-white">
-              Preview
-            </span>
-          </div>
           <div v-if="!generatedImage" class="relative max-w-lg px-8 text-center">
             <p class="text-4xl font-black leading-none text-white">YOUR AI THUMBNAIL PREVIEW</p>
             <p class="mt-4 rounded bg-lemon px-4 py-2 font-black text-ink">Generated result appears here</p>
@@ -83,13 +78,14 @@
           >
             Edit With Uploads
           </NuxtLink>
-          <NuxtLink
+          <button
             v-if="latestThumbnail"
-            :to="`/pricing?thumbnail=${latestThumbnail.id}&plan=single`"
+            type="button"
             class="rounded-md bg-coral px-4 py-2 text-sm font-bold text-white"
+            @click="payForThumbnail(latestThumbnail)"
           >
             Download HD
-          </NuxtLink>
+          </button>
           <NuxtLink to="/editor" class="rounded-md bg-ink px-4 py-2 text-sm font-bold text-white">Open Editor</NuxtLink>
           <NuxtLink to="/dashboard" class="rounded-md border border-slate-300 px-4 py-2 text-sm font-bold text-ink">View Generated</NuxtLink>
         </div>
@@ -101,6 +97,10 @@
 <script setup lang="ts">
 import { categories } from '~/data/templates'
 import type { GeneratedThumbnail, ThumbnailCategory } from '~/types/thumbnail'
+
+definePageMeta({
+  middleware: 'auth'
+})
 
 usePageSeo(
   'AI Thumbnail Generator - AI Thumbnail Maker',
@@ -122,15 +122,16 @@ const form = reactive({
   mainText: '',
   backgroundStyle: 'high-contrast creator studio',
   colorTheme: 'red, yellow, black',
-  emotion: 'viral'
+  emotion: 'viral' as 'professional' | 'viral' | 'bold' | 'cinematic'
 })
 
 const generate = async () => {
   loading.value = true
   error.value = ''
   success.value = ''
+
   try {
-    const result = await $fetch<GeneratedThumbnail>('/api/generate-thumbnail', {
+    const result = await $fetch<GeneratedThumbnail>('/api/thumbnails/generate', {
       method: 'POST',
       body: {
         ...form,
@@ -138,15 +139,23 @@ const generate = async () => {
         backgroundImage: backgroundImage.value
       }
     })
-    generatedImage.value = result.imageUrl
+    generatedImage.value = result.watermarkedImageUrl || result.imageUrl
     latestThumbnail.value = result
     store.saveGenerated(result)
     success.value = 'Thumbnail generated and saved to your dashboard.'
   } catch (event: any) {
+    if (event?.statusCode === 401 || event?.response?.status === 401) {
+      await navigateTo('/login')
+      return
+    }
     error.value = event?.data?.message || event?.statusMessage || 'Unable to generate thumbnail. Please try again.'
   } finally {
     loading.value = false
   }
+}
+
+const payForThumbnail = async (thumbnail: GeneratedThumbnail) => {
+  await navigateTo(`/pricing?thumbnail=${thumbnail.id}&plan=single`)
 }
 
 const sendToEditor = () => {

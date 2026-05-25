@@ -40,6 +40,10 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  middleware: 'auth'
+})
+
 declare global {
   interface Window {
     Razorpay?: new (options: RazorpayOptions) => { open: () => void }
@@ -58,6 +62,7 @@ interface PricingPlan {
 
 interface RazorpayOrderResponse {
   orderId: string
+  paymentRecordId: string
   keyId: string
   provider: string
   plan: string
@@ -70,6 +75,11 @@ interface RazorpayHandlerResponse {
   razorpay_order_id: string
   razorpay_payment_id: string
   razorpay_signature: string
+}
+
+interface VerifyResponse {
+  verified: boolean
+  downloadUrl: string
 }
 
 interface RazorpayOptions {
@@ -150,13 +160,12 @@ const payWithRazorpay = async (plan: PricingPlan) => {
 
   try {
     await loadRazorpayCheckout()
-    const order = await $fetch<RazorpayOrderResponse>('/api/payment/create-order', {
+    const order = await $fetch<RazorpayOrderResponse>('/api/payments/create-order', {
       method: 'POST',
       body: {
         plan: plan.name,
         amount: plan.amount,
         currency: 'INR',
-        provider: 'razorpay',
         thumbnailId: selectedThumbnail.value
       }
     })
@@ -187,16 +196,18 @@ const payWithRazorpay = async (plan: PricingPlan) => {
       },
       handler: async response => {
         try {
-          await $fetch('/api/payment/verify', {
+          const verified = await $fetch<VerifyResponse>('/api/payments/verify', {
             method: 'POST',
             body: {
               ...response,
-              plan: plan.name,
               thumbnailId: selectedThumbnail.value
             }
           })
           store.addDownload({ id: selectedThumbnail.value, title: `${plan.name} HD download`, paid: true })
           paymentStatus.value = 'Payment verified. Your watermark-free HD download is unlocked.'
+          if (verified.downloadUrl) {
+            window.location.href = verified.downloadUrl
+          }
         } catch (error: any) {
           paymentError.value = error?.data?.message || 'Payment could not be verified. Please contact support with your payment ID.'
         } finally {

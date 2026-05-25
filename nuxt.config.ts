@@ -4,10 +4,18 @@ export default defineNuxtConfig({
   modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', '@nuxtjs/seo'],
   css: ['~/assets/css/main.css'],
   runtimeConfig: {
+    authSessionSecret: process.env.AUTH_SESSION_SECRET,
+    googleClientId: process.env.GOOGLE_CLIENT_ID,
+    googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
     openaiApiKey: process.env.OPENAI_API_KEY,
     razorpayKeyId: process.env.RAZORPAY_KEY_ID,
     razorpayKeySecret: process.env.RAZORPAY_KEY_SECRET,
+    razorpayWebhookSecret: process.env.RAZORPAY_WEBHOOK_SECRET,
+    cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
+    cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+    cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET,
     public: {
+      razorpayKeyId: process.env.RAZORPAY_KEY_ID,
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://aithumbnailmaker.example.com',
       siteName: 'AI Thumbnail Maker'
     }

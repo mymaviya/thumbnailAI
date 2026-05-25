@@ -2,67 +2,109 @@
   <div>
     <PageHero
       eyebrow="Creator dashboard"
-      title="My generated thumbnails and downloads"
-      description="Review generated assets, recent download activity, and account-ready creator stats."
+      title="My thumbnails and downloads"
+      description="Review generated thumbnails, payment status, and secure HD downloads."
     />
-    <section class="mx-auto grid max-w-7xl gap-6 px-4 py-10 sm:px-6 lg:grid-cols-3 lg:px-8">
+
+    <section class="mx-auto grid max-w-7xl gap-6 px-4 py-10 sm:px-6 lg:grid-cols-4 lg:px-8">
+      <article class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm lg:col-span-2">
+        <div class="flex items-center gap-4">
+          <img v-if="data?.user?.avatar" :src="data.user.avatar" alt="" class="size-14 rounded-full object-cover">
+          <div>
+            <p class="text-sm font-black uppercase text-slate-500">Signed in</p>
+            <h2 class="text-2xl font-black text-ink">{{ data?.user?.name }}</h2>
+            <p class="text-sm text-slate-600">{{ data?.user?.email }}</p>
+          </div>
+        </div>
+      </article>
       <article class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
         <p class="text-sm font-black uppercase text-slate-500">Generated</p>
-        <p class="mt-2 text-4xl font-black">{{ store.generated.length }}</p>
+        <p class="mt-2 text-4xl font-black">{{ thumbnails.length }}</p>
       </article>
       <article class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-        <p class="text-sm font-black uppercase text-slate-500">Downloads</p>
-        <p class="mt-2 text-4xl font-black">{{ store.downloads.length }}</p>
-      </article>
-      <article class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-        <p class="text-sm font-black uppercase text-slate-500">Plan</p>
-        <p class="mt-2 text-4xl font-black">Preview</p>
+        <p class="text-sm font-black uppercase text-slate-500">Paid</p>
+        <p class="mt-2 text-4xl font-black">{{ paidCount }}</p>
       </article>
     </section>
 
-    <section class="mx-auto grid max-w-7xl gap-8 px-4 pb-14 sm:px-6 lg:grid-cols-2 lg:px-8">
-      <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-        <h2 class="text-2xl font-black">My generated thumbnails</h2>
-        <div class="mt-5 space-y-4">
-          <article v-for="item in store.generated" :key="item.id" class="flex gap-4 rounded-lg border border-slate-200 p-3">
-            <div class="watermark relative h-20 w-32 overflow-hidden rounded">
-              <img :src="item.imageUrl" :alt="item.title" class="h-full w-full object-cover">
-            </div>
-            <div class="flex-1">
-              <h3 class="font-black">{{ item.title }}</h3>
-              <p class="text-sm text-slate-500">{{ item.category }} • {{ new Date(item.createdAt).toLocaleString() }}</p>
-              <NuxtLink :to="`/pricing?thumbnail=${item.id}&plan=single`" class="mt-2 inline-block rounded-md bg-coral px-3 py-2 text-xs font-black text-white">
-                Download HD
-              </NuxtLink>
-            </div>
-          </article>
-          <p v-if="!store.generated.length" class="rounded-md bg-slate-50 p-4 text-sm font-semibold text-slate-600">Generated thumbnails will appear here.</p>
+    <section class="mx-auto max-w-7xl px-4 pb-14 sm:px-6 lg:px-8">
+      <div class="mb-5 flex items-end justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-black">Generated thumbnails</h2>
+          <p class="mt-1 text-slate-600">Watermarked previews stay visible until payment unlocks the HD file.</p>
         </div>
+        <NuxtLink to="/generate" class="rounded-md bg-coral px-4 py-2 text-sm font-bold text-white">Generate</NuxtLink>
       </div>
 
-      <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-        <h2 class="text-2xl font-black">My downloads</h2>
-        <div class="mt-5 space-y-3">
-          <article v-for="item in store.downloads" :key="`${item.id}-${item.downloadedAt}`" class="flex items-center justify-between gap-3 rounded-lg border border-slate-200 p-3">
-            <div>
-              <h3 class="font-black">{{ item.title }}</h3>
-              <p class="text-sm text-slate-500">{{ new Date(item.downloadedAt).toLocaleString() }}</p>
+      <div v-if="pending" class="rounded-lg border border-slate-200 bg-white p-6 font-semibold text-slate-600 shadow-sm">Loading dashboard...</div>
+      <div v-else-if="!thumbnails.length" class="rounded-lg border border-slate-200 bg-white p-8 text-center shadow-sm">
+        <h3 class="text-xl font-black text-ink">No thumbnails yet</h3>
+        <p class="mt-2 text-slate-600">Generate your first thumbnail and it will appear here.</p>
+      </div>
+      <div v-else class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <article v-for="thumbnail in thumbnails" :key="thumbnail.id" class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+          <div class="thumbnail-frame">
+            <img :src="thumbnail.watermarkedImageUrl" :alt="thumbnail.title" class="h-full w-full object-cover">
+          </div>
+          <div class="p-5">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <h3 class="font-black text-ink">{{ thumbnail.title }}</h3>
+                <p class="mt-1 text-sm text-slate-500">{{ thumbnail.category }} · {{ formatDate(thumbnail.createdAt) }}</p>
+              </div>
+              <span :class="statusClass(thumbnail.paymentStatus)" class="rounded px-2 py-1 text-xs font-black uppercase">
+                {{ thumbnail.paymentStatus }}
+              </span>
             </div>
-            <span class="rounded bg-slate-100 px-2 py-1 text-xs font-black">{{ item.paid ? 'Paid HD' : 'Watermarked preview' }}</span>
-          </article>
-          <p v-if="!store.downloads.length" class="rounded-md bg-slate-50 p-4 text-sm font-semibold text-slate-600">Download activity will appear here.</p>
-        </div>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <a
+                v-if="thumbnail.paymentStatus === 'paid'"
+                :href="`/api/downloads/${thumbnail.id}`"
+                class="rounded-md bg-ink px-4 py-2 text-sm font-bold text-white"
+              >
+                Download HD
+              </a>
+              <NuxtLink
+                v-else
+                :to="`/pricing?thumbnail=${thumbnail.id}&plan=single`"
+                class="rounded-md bg-coral px-4 py-2 text-sm font-bold text-white"
+              >
+                Pay to Unlock
+              </NuxtLink>
+            </div>
+          </div>
+        </article>
       </div>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  middleware: 'auth'
+})
+
 usePageSeo(
   'Dashboard - AI Thumbnail Maker',
   'View generated thumbnails and download history inside the AI Thumbnail Maker creator dashboard.',
   '/dashboard'
 )
 
-const store = useThumbnailStore()
+const { data, pending, refresh } = await useFetch<{ user: any; thumbnails: any[] }>('/api/thumbnails', {
+  credentials: 'include'
+})
+
+const thumbnails = computed(() => data.value?.thumbnails || [])
+const paidCount = computed(() => thumbnails.value.filter(thumbnail => thumbnail.paymentStatus === 'paid').length)
+
+onMounted(() => {
+  refresh()
+})
+
+const formatDate = (date: string) => new Date(date).toLocaleDateString()
+const statusClass = (status: string) => {
+  if (status === 'paid') return 'bg-emerald-50 text-emerald-700'
+  if (status === 'failed') return 'bg-red-50 text-red-700'
+  return 'bg-amber-50 text-amber-700'
+}
 </script>
