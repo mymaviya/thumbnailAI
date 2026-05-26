@@ -1,6 +1,6 @@
 # AI Thumbnail Maker
 
-Nuxt 3 app for Google-authenticated AI thumbnail generation, Razorpay payments, secure HD downloads, and admin reporting.
+AI Thumbnail Maker is a Maviya IT Services product for Google-authenticated AI thumbnail generation, Razorpay payments, secure HD downloads, and admin reporting.
 
 ## Setup
 

@@ -3,7 +3,7 @@
     <PageHero
       eyebrow="Digital delivery"
       title="Delivery Policy"
-      description="How AI Thumbnail Maker delivers digital thumbnail access, previews, and watermark-free HD downloads after payment."
+      description="How Maviya IT Services delivers AI Thumbnail Maker digital access, previews, and watermark-free HD downloads after payment."
     />
 
     <section class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
@@ -11,7 +11,7 @@
         <div>
           <p class="text-sm font-bold uppercase tracking-wide text-coral">Last updated: May 23, 2026</p>
           <p class="mt-3 leading-7 text-slate-600">
-            AI Thumbnail Maker provides digital products only. No physical goods are shipped.
+            Maviya IT Services provides AI Thumbnail Maker digital products only. No physical goods are shipped.
           </p>
         </div>
 
@@ -26,15 +26,15 @@
 
 <script setup lang="ts">
 usePageSeo(
-  'Delivery Policy - AI Thumbnail Maker',
-  'Learn how AI Thumbnail Maker delivers digital thumbnail downloads and paid access after successful payment verification.',
+  'Delivery Policy - Maviya IT Services',
+  'Learn how Maviya IT Services delivers AI Thumbnail Maker digital thumbnail downloads and paid access after successful payment verification.',
   '/delivery-policy'
 )
 
 const sections = [
   {
     title: 'Digital Delivery Only',
-    body: 'All AI Thumbnail Maker products are digital. We do not ship physical products, printed thumbnails, storage devices, or paper invoices by courier or post.'
+    body: 'All AI Thumbnail Maker products from Maviya IT Services are digital. We do not ship physical products, printed thumbnails, storage devices, or paper invoices by courier or post.'
   },
   {
     title: 'Delivery Method',

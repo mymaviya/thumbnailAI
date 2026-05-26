@@ -3,7 +3,7 @@
     <PageHero
       eyebrow="Terms of use"
       title="Terms and Conditions"
-      description="The rules for using AI Thumbnail Maker, including templates, AI generation, payments, downloads, and acceptable use."
+      description="The rules from Maviya IT Services for using AI Thumbnail Maker, including templates, AI generation, payments, downloads, and acceptable use."
     />
 
     <section class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
@@ -11,7 +11,7 @@
         <div>
           <p class="text-sm font-bold uppercase tracking-wide text-coral">Last updated: May 22, 2026</p>
           <p class="mt-3 leading-7 text-slate-600">
-            By accessing or using AI Thumbnail Maker, you agree to these Terms and Conditions. If you do not agree, you should not use the service.
+            By accessing or using AI Thumbnail Maker, a product operated by Maviya IT Services, you agree to these Terms and Conditions. If you do not agree, you should not use the service.
           </p>
         </div>
 
@@ -26,8 +26,8 @@
 
 <script setup lang="ts">
 usePageSeo(
-  'Terms and Conditions - AI Thumbnail Maker',
-  'Review the Terms and Conditions for using AI Thumbnail Maker templates, AI generation, editor tools, payments, and downloads.',
+  'Terms and Conditions - Maviya IT Services',
+  'Review the Maviya IT Services Terms and Conditions for using AI Thumbnail Maker templates, AI generation, editor tools, payments, and downloads.',
   '/terms-and-conditions'
 )
 
@@ -46,7 +46,7 @@ const sections = [
   },
   {
     title: 'Templates and License',
-    body: 'Templates, layouts, interface elements, and platform assets remain owned by AI Thumbnail Maker or its licensors. After payment, you may use your exported thumbnail for your own video, channel, marketing, or business use, subject to these terms.'
+    body: 'Templates, layouts, interface elements, and platform assets remain owned by Maviya IT Services or its licensors. After payment, you may use your exported thumbnail for your own video, channel, marketing, or business use, subject to these terms.'
   },
   {
     title: 'Payments and Downloads',
@@ -66,7 +66,7 @@ const sections = [
   },
   {
     title: 'Limitation of Liability',
-    body: 'To the fullest extent allowed by law, AI Thumbnail Maker is not liable for indirect, incidental, special, consequential, or lost-profit damages arising from your use of the service.'
+    body: 'To the fullest extent allowed by law, Maviya IT Services is not liable for indirect, incidental, special, consequential, or lost-profit damages arising from your use of the service.'
   },
   {
     title: 'Changes to These Terms',
@@ -74,7 +74,7 @@ const sections = [
   },
   {
     title: 'Contact',
-    body: 'For questions about these Terms and Conditions, contact the AI Thumbnail Maker support team through the contact method provided in the app or on the website.'
+    body: 'For questions about these Terms and Conditions, contact Maviya IT Services through the contact method provided in the app or on the website.'
   }
 ]
 </script>

@@ -53,6 +53,7 @@
         <div>
           <p class="font-black text-ink">AI Thumbnail Maker</p>
           <p class="mt-2 max-w-sm">SEO-ready thumbnail templates, AI generation, editing, and payment-ready downloads.</p>
+          <p class="mt-2 text-xs font-bold text-slate-500">A product by Maviya IT Services.</p>
         </div>
         <div class="flex flex-wrap gap-3 md:justify-center">
           <NuxtLink to="/templates" class="hover:text-coral">Templates</NuxtLink>

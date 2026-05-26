@@ -28,7 +28,8 @@ definePageMeta({
 usePageSeo(
   'Admin Dashboard - AI Thumbnail Maker',
   'Admin summary for AI Thumbnail Maker users, thumbnails, payments, downloads, and revenue.',
-  '/admin'
+  '/admin',
+  { noindex: true }
 )
 
 const { data } = await useFetch<any>('/api/admin/summary', {

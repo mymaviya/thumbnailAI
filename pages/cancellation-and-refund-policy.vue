@@ -3,7 +3,7 @@
     <PageHero
       eyebrow="Refunds"
       title="Cancellation and Refund Policy"
-      description="How cancellations, duplicate payments, failed downloads, and refund requests are handled for AI Thumbnail Maker."
+      description="How Maviya IT Services handles cancellations, duplicate payments, failed downloads, and refund requests for AI Thumbnail Maker."
     />
 
     <section class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
@@ -11,7 +11,7 @@
         <div>
           <p class="text-sm font-bold uppercase tracking-wide text-coral">Last updated: May 23, 2026</p>
           <p class="mt-3 leading-7 text-slate-600">
-            AI Thumbnail Maker sells digital thumbnail downloads and digital access. This policy explains when an order can be cancelled and how refund requests are reviewed.
+            Maviya IT Services sells digital thumbnail downloads and digital access through AI Thumbnail Maker. This policy explains when an order can be cancelled and how refund requests are reviewed.
           </p>
         </div>
 
@@ -26,8 +26,8 @@
 
 <script setup lang="ts">
 usePageSeo(
-  'Cancellation and Refund Policy - AI Thumbnail Maker',
-  'Read the cancellation and refund policy for AI Thumbnail Maker digital thumbnail downloads, failed payments, duplicate payments, and technical issues.',
+  'Cancellation and Refund Policy - Maviya IT Services',
+  'Read the Maviya IT Services cancellation and refund policy for AI Thumbnail Maker digital thumbnail downloads, failed payments, duplicate payments, and technical issues.',
   '/cancellation-and-refund-policy'
 )
 

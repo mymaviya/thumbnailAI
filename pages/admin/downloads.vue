@@ -50,7 +50,8 @@ definePageMeta({
 usePageSeo(
   'Admin Downloads - AI Thumbnail Maker',
   'Admin download list for AI Thumbnail Maker.',
-  '/admin/downloads'
+  '/admin/downloads',
+  { noindex: true }
 )
 
 const { data } = await useFetch<{ downloads: any[] }>('/api/admin/downloads', {

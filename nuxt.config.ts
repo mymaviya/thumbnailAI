@@ -23,7 +23,19 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: { lang: 'en' },
-      link: [{ rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }]
+      titleTemplate: title => {
+        if (!title) return 'AI Thumbnail Maker by Maviya IT Services'
+        return title.includes('AI Thumbnail Maker') ? title : `${title} | AI Thumbnail Maker`
+      },
+      meta: [
+        { name: 'theme-color', content: '#ff4d5a' },
+        { name: 'application-name', content: 'AI Thumbnail Maker' },
+        { name: 'apple-mobile-web-app-title', content: 'AI Thumbnail Maker' }
+      ],
+      link: [
+        { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },
+        { rel: 'apple-touch-icon', href: '/favicon.svg' }
+      ]
     }
   },
   site: {
@@ -34,12 +46,19 @@ export default defineNuxtConfig({
   schemaOrg: {
     identity: {
       type: 'Organization',
-      name: 'AI Thumbnail Maker',
+      name: 'Maviya IT Services',
       url: process.env.NUXT_PUBLIC_SITE_URL || 'https://aithumbnailmaker.example.com',
       logo: '/og-image.svg'
     }
   },
   robots: {
-    rules: [{ userAgent: '*', allow: '/' }]
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: ['/admin', '/dashboard', '/api', '/login']
+      }
+    ],
+    sitemap: `${process.env.NUXT_PUBLIC_SITE_URL || 'https://aithumbnailmaker.example.com'}/sitemap.xml`
   }
 })

@@ -3,7 +3,7 @@
     <PageHero
       eyebrow="Privacy policy"
       title="Privacy Policy"
-      description="How AI Thumbnail Maker collects, uses, and protects information when you browse templates, generate thumbnails, and unlock downloads."
+      description="How Maviya IT Services handles information when you browse templates, generate thumbnails, and unlock downloads through AI Thumbnail Maker."
     />
 
     <section class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
@@ -11,7 +11,7 @@
         <div>
           <p class="text-sm font-bold uppercase tracking-wide text-coral">Last updated: May 22, 2026</p>
           <p class="mt-3 leading-7 text-slate-600">
-            This Privacy Policy explains how AI Thumbnail Maker handles information related to your use of our thumbnail templates, AI generation tools, editor, dashboard, payments, and downloads.
+            This Privacy Policy explains how Maviya IT Services handles information related to your use of AI Thumbnail Maker, including thumbnail templates, AI generation tools, editor, dashboard, payments, and downloads.
           </p>
         </div>
 
@@ -26,8 +26,8 @@
 
 <script setup lang="ts">
 usePageSeo(
-  'Privacy Policy - AI Thumbnail Maker',
-  'Read how AI Thumbnail Maker collects, uses, stores, and protects information for thumbnail generation, editing, payments, and downloads.',
+  'Privacy Policy - Maviya IT Services',
+  'Read how Maviya IT Services collects, uses, stores, and protects information for AI Thumbnail Maker generation, editing, payments, and downloads.',
   '/privacy'
 )
 
@@ -54,7 +54,7 @@ const sections = [
   },
   {
     title: 'Data Sharing',
-    body: 'We do not sell your personal information. We may share limited information with service providers that help us operate the app, process payments, deliver downloads, maintain security, or comply with legal requirements.'
+    body: 'Maviya IT Services does not sell your personal information. We may share limited information with service providers that help us operate the app, process payments, deliver downloads, maintain security, or comply with legal requirements.'
   },
   {
     title: 'Data Security',
@@ -66,7 +66,7 @@ const sections = [
   },
   {
     title: 'Contact',
-    body: 'For privacy questions or requests, contact the AI Thumbnail Maker support team through the contact method provided in the app or on the website.'
+    body: 'For privacy questions or requests, contact Maviya IT Services through the contact method provided in the app or on the website.'
   }
 ]
 </script>

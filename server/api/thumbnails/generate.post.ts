@@ -7,11 +7,16 @@ import type { ThumbnailCategory } from '~/types/thumbnail'
 
 interface GenerateThumbnailBody {
   videoTitle: string
-  category: ThumbnailCategory
-  mainText: string
+  category?: ThumbnailCategory
+  thumbnailStyle?: string
+  mainSubject?: string
+  emotion?: string
+  background?: string
+  textPosition?: string
+  enhancedPrompt?: string
+  mainText?: string
   backgroundStyle?: string
   colorTheme?: string
-  emotion?: 'professional' | 'viral' | 'bold' | 'cinematic'
   characterImage?: string
   backgroundImage?: string
 }
@@ -35,10 +40,10 @@ export default defineEventHandler(async event => {
     })
   }
 
-  if (!body.videoTitle?.trim() || !body.mainText?.trim() || !body.category) {
+  if (!body.videoTitle?.trim()) {
     throw createError({
       statusCode: 422,
-      statusMessage: 'Video title, main text, and category are required.'
+      statusMessage: 'Video title is required.'
     })
   }
 
@@ -54,23 +59,27 @@ export default defineEventHandler(async event => {
     body.backgroundImage ? { image_url: body.backgroundImage } : null
   ].filter(Boolean)
   const hasReferenceImages = referenceImages.length > 0
-  const prompt = [
-    'Create a high-converting YouTube video thumbnail in a 16:9 composition.',
+  const category = body.category || 'Tech'
+  const mainText = body.mainText?.trim() || body.videoTitle.trim()
+  const prompt = body.enhancedPrompt?.trim() || [
+    'Create a high CTR YouTube thumbnail style image in a 16:9 aspect ratio.',
     'Design for 1280x720 usage with all important text and subjects inside the central safe area.',
     `Video title: ${body.videoTitle}.`,
-    `Category: ${body.category}.`,
-    `Main text on thumbnail: ${body.mainText}.`,
-    `Background style: ${body.backgroundStyle || 'modern creator studio'}.`,
+    `Thumbnail style: ${body.thumbnailStyle || 'Viral YouTube thumbnail'}.`,
+    `Main subject: ${body.mainSubject || body.videoTitle}.`,
+    `Emotion: ${body.emotion || 'strong excited emotion'}.`,
+    `Background: ${body.background || body.backgroundStyle || 'cinematic creator background'}.`,
     `Color theme: ${body.colorTheme || 'bold complementary colors'}.`,
-    `Emotion/style: ${body.emotion || 'viral'}.`,
+    `Text position: ${body.textPosition || 'empty space on the left for bold readable text'}.`,
+    `Main text on thumbnail: ${mainText}.`,
     body.characterImage
       ? 'Use the first reference image as the main character or creator. Preserve recognizable details while making it thumbnail-ready.'
       : '',
     body.backgroundImage
       ? 'Use the second reference image as the background or setting. Adapt it with cinematic lighting, contrast, and depth.'
       : '',
-    'Use bold readable text, strong contrast, dramatic subject placement, and no platform logos.',
-    'Avoid tiny text, avoid watermark marks, and keep the final image clean for YouTube upload.'
+    'Use strong emotion, a large clear subject, cinematic lighting, bold colors, strong contrast, clean composition, and empty space for text.',
+    'Negative instructions: avoid blur, clutter, distorted faces, unreadable text, extra fingers, bad anatomy, low contrast, watermarks, platform logos, and messy composition.'
   ].filter(Boolean).join(' ')
 
   let response: OpenAIImageResponse
@@ -126,7 +135,7 @@ export default defineEventHandler(async event => {
       userId: user.id,
       title: body.videoTitle.trim(),
       prompt: image?.revised_prompt || prompt,
-      category: body.category,
+      category,
       imageUrl: stored.imageUrl,
       watermarkedImageUrl: stored.watermarkedImageUrl,
       status: ThumbnailStatus.generated,

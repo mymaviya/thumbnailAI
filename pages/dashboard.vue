@@ -87,7 +87,8 @@ definePageMeta({
 usePageSeo(
   'Dashboard - AI Thumbnail Maker',
   'View generated thumbnails and download history inside the AI Thumbnail Maker creator dashboard.',
-  '/dashboard'
+  '/dashboard',
+  { noindex: true }
 )
 
 const { data, pending, refresh } = await useFetch<{ user: any; thumbnails: any[] }>('/api/thumbnails', {

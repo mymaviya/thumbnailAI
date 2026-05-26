@@ -179,8 +179,8 @@ const payWithRazorpay = async (plan: PricingPlan) => {
       key: order.keyId,
       amount: order.amount,
       currency: order.currency,
-      name: 'AI Thumbnail Maker',
-      description: `${plan.name} HD download`,
+      name: 'Maviya IT Services',
+      description: `AI Thumbnail Maker - ${plan.name} HD download`,
       order_id: order.orderId,
       notes: {
         plan: plan.name,

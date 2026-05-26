@@ -51,7 +51,8 @@ definePageMeta({
 usePageSeo(
   'Admin Users - AI Thumbnail Maker',
   'Admin user list for AI Thumbnail Maker.',
-  '/admin/users'
+  '/admin/users',
+  { noindex: true }
 )
 
 const { data } = await useFetch<{ users: any[] }>('/api/admin/users', {

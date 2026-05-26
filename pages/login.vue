@@ -40,7 +40,8 @@
 usePageSeo(
   'Login - AI Thumbnail Maker',
   'Login with Google to manage generated thumbnails, paid downloads, and creator account settings.',
-  '/login'
+  '/login',
+  { noindex: true }
 )
 
 const { data } = await useFetch<{ user: any }>('/api/auth/me', {
