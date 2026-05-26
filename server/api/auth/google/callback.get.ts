@@ -18,37 +18,46 @@ export default defineEventHandler(async event => {
     })
   }
 
-  const token = await exchangeGoogleCode(event, code)
-  const googleUser = await fetchGoogleUser(token.access_token)
+  try {
+    const token = await exchangeGoogleCode(event, code)
+    const googleUser = await fetchGoogleUser(token.access_token)
 
-  if (!googleUser.email || !googleUser.sub || googleUser.email_verified === false) {
-    throw createError({
-      statusCode: 403,
-      statusMessage: 'Google account email must be verified.'
-    })
-  }
-
-  const user = await prisma.user.upsert({
-    where: { email: googleUser.email },
-    create: {
-      name: googleUser.name || googleUser.email,
-      email: googleUser.email,
-      googleId: googleUser.sub,
-      avatar: googleUser.picture || null,
-      role: UserRole.user
-    },
-    update: {
-      name: googleUser.name || googleUser.email,
-      googleId: googleUser.sub,
-      avatar: googleUser.picture || null
+    if (!googleUser.email || !googleUser.sub || googleUser.email_verified === false) {
+      throw createError({
+        statusCode: 403,
+        statusMessage: 'Google account email must be verified.'
+      })
     }
-  })
 
-  setUserSession(event, {
-    userId: user.id,
-    email: user.email,
-    role: user.role
-  })
+    const user = await prisma.user.upsert({
+      where: { email: googleUser.email },
+      create: {
+        name: googleUser.name || googleUser.email,
+        email: googleUser.email,
+        googleId: googleUser.sub,
+        avatar: googleUser.picture || null,
+        role: UserRole.user
+      },
+      update: {
+        name: googleUser.name || googleUser.email,
+        googleId: googleUser.sub,
+        avatar: googleUser.picture || null
+      }
+    })
 
-  return sendRedirect(event, user.role === UserRole.admin ? '/admin' : '/dashboard')
+    setUserSession(event, {
+      userId: user.id,
+      email: user.email,
+      role: user.role
+    })
+
+    return sendRedirect(event, user.role === UserRole.admin ? '/admin' : '/dashboard')
+  } catch (error: any) {
+    console.error('Google OAuth callback failed', {
+      statusCode: error?.statusCode || error?.response?.status,
+      message: error?.data?.error_description || error?.data?.error || error?.message
+    })
+
+    return sendRedirect(event, '/login?error=google_oauth_failed')
+  }
 })

@@ -14,9 +14,21 @@ interface GoogleUserResponse {
   email_verified?: boolean
 }
 
-export const getGoogleRedirectUri = (event: any) => {
+const getSiteUrl = (event: any) => {
   const config = useRuntimeConfig(event)
-  return `${config.public.siteUrl}/api/auth/google/callback`
+  const configuredUrl = String(config.public.siteUrl || '').trim().replace(/\/$/, '')
+
+  if (configuredUrl) {
+    return configuredUrl
+  }
+
+  const protocol = getRequestProtocol(event, { xForwardedProto: true })
+  const host = getRequestHost(event, { xForwardedHost: true })
+  return `${protocol}://${host}`
+}
+
+export const getGoogleRedirectUri = (event: any) => {
+  return `${getSiteUrl(event)}/api/auth/google/callback`
 }
 
 export const getGoogleAuthUrl = (event: any, state: string) => {
