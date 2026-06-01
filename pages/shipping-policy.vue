@@ -9,7 +9,7 @@
     <section class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
       <div class="space-y-8 rounded-lg border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
         <div>
-          <p class="text-sm font-bold uppercase tracking-wide text-coral">Last updated: May 23, 2026</p>
+          <p class="text-sm font-bold uppercase tracking-wide text-coral">Last updated: June 1, 2026</p>
           <p class="mt-3 leading-7 text-slate-600">
             Maviya IT Services provides AI Thumbnail Maker digital thumbnail services only. No physical products are shipped.
           </p>
@@ -38,11 +38,11 @@ const sections = [
   },
   {
     title: 'Digital Delivery',
-    body: 'Paid purchases unlock digital access to watermark-free HD thumbnail downloads inside the website after successful Razorpay payment verification.'
+    body: 'Paid purchases unlock digital access to watermark-free HD thumbnail downloads inside the website after successful Razorpay payment verification, including payments made through UPI when UPI is available on Razorpay Checkout.'
   },
   {
     title: 'Delivery Timeline',
-    body: 'Digital delivery is usually immediate after payment verification. Temporary delays may occur because of payment confirmation delays, network issues, service maintenance, or browser-related issues.'
+    body: 'Digital delivery is usually immediate after payment verification. Temporary delays may occur because of UPI confirmation delays, payment provider delays, network issues, service maintenance, or browser-related issues.'
   },
   {
     title: 'Shipping Fees',
@@ -50,7 +50,7 @@ const sections = [
   },
   {
     title: 'Delivery Support',
-    body: 'If your payment succeeds but download access does not unlock, contact support with your Razorpay payment ID, order ID, selected plan, and thumbnail ID if available.'
+    body: 'If your payment succeeds but download access does not unlock, contact support with your Razorpay payment ID, order ID, selected plan, payment method such as UPI/card/netbanking if known, and thumbnail ID if available.'
   },
   {
     title: 'Contact',

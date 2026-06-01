@@ -9,7 +9,7 @@
     <section class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
       <div class="space-y-8 rounded-lg border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
         <div>
-          <p class="text-sm font-bold uppercase tracking-wide text-coral">Last updated: May 23, 2026</p>
+          <p class="text-sm font-bold uppercase tracking-wide text-coral">Last updated: June 1, 2026</p>
           <p class="mt-3 leading-7 text-slate-600">
             Maviya IT Services provides AI Thumbnail Maker digital products only. No physical goods are shipped.
           </p>
@@ -42,7 +42,7 @@ const sections = [
   },
   {
     title: 'Delivery Timeline',
-    body: 'Digital delivery is usually immediate after successful Razorpay payment verification. In rare cases, delivery may take longer because of payment confirmation delays, network issues, or service maintenance.'
+    body: 'Digital delivery is usually immediate after successful Razorpay payment verification. In rare cases, delivery may take longer because of UPI confirmation delays, payment provider delays, network issues, or service maintenance.'
   },
   {
     title: 'No Shipping Charges',
@@ -50,7 +50,7 @@ const sections = [
   },
   {
     title: 'Access Issues',
-    body: 'If payment succeeds but paid access or downloads do not unlock, contact support with your Razorpay payment ID, order ID, selected plan, and thumbnail ID if available.'
+    body: 'If payment succeeds but paid access or downloads do not unlock, contact support with your Razorpay payment ID, order ID, selected plan, payment method such as UPI/card/netbanking if known, and thumbnail ID if available.'
   },
   {
     title: 'File Availability',

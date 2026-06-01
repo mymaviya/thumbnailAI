@@ -9,7 +9,7 @@
     <section class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
       <div class="space-y-8 rounded-lg border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
         <div>
-          <p class="text-sm font-bold uppercase tracking-wide text-coral">Last updated: May 22, 2026</p>
+          <p class="text-sm font-bold uppercase tracking-wide text-coral">Last updated: June 1, 2026</p>
           <p class="mt-3 leading-7 text-slate-600">
             This Privacy Policy explains how Maviya IT Services handles information related to your use of AI Thumbnail Maker, including thumbnail templates, AI generation tools, editor, dashboard, payments, and downloads.
           </p>
@@ -34,7 +34,7 @@ usePageSeo(
 const sections = [
   {
     title: 'Information We Collect',
-    body: 'We may collect information you provide while using the service, such as generated prompts, selected templates, editor choices, download activity, account-related details, and payment metadata needed to process purchases. Payment card or UPI details are handled by the payment provider and are not stored by us.'
+    body: 'We may collect information you provide while using the service, such as generated prompts, selected templates, editor choices, download activity, account-related details, and payment metadata needed to process purchases. Payment card details, UPI IDs, UPI PINs, bank credentials, or wallet credentials are handled by Razorpay or the relevant payment provider and are not stored by us.'
   },
   {
     title: 'How We Use Information',
@@ -50,7 +50,11 @@ const sections = [
   },
   {
     title: 'Payments',
-    body: 'Payments are processed through third-party payment providers such as Razorpay. We receive limited transaction information, such as order ID, payment ID, plan, amount, currency, and verification status, so we can unlock paid downloads.'
+    body: 'Payments are processed through Razorpay. Razorpay Checkout may offer UPI, cards, netbanking, wallets, or other enabled payment methods. We receive limited transaction information, such as order ID, payment ID, plan, amount, currency, method status, and verification status, so we can unlock paid downloads and support refund or failed-payment requests.'
+  },
+  {
+    title: 'UPI Payment Privacy',
+    body: 'For UPI payments, authorization happens inside Razorpay Checkout and supported UPI apps or bank systems. We do not collect your UPI PIN, MPIN, app password, or bank login details. Do not share these credentials with our support team or anyone claiming to represent us.'
   },
   {
     title: 'Data Sharing',

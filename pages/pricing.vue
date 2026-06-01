@@ -3,8 +3,13 @@
     <PageHero
       eyebrow="HD downloads"
       title="Unlock watermark-free thumbnails"
-      description="Generate or select a thumbnail, preview it with a watermark, then unlock HD downloads after payment."
+      description="Pay securely through Razorpay using UPI, cards, netbanking, wallets, or other enabled payment methods."
     />
+    <section class="mx-auto max-w-7xl px-4 pt-10 sm:px-6 lg:px-8">
+      <div class="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm font-semibold leading-6 text-emerald-800">
+        UPI payments are supported through Razorpay Checkout, including available UPI apps such as Google Pay, PhonePe and BHIM UPI when enabled on our Razorpay account.
+      </div>
+    </section>
     <section class="mx-auto grid max-w-7xl gap-6 px-4 py-10 sm:px-6 lg:grid-cols-3 lg:px-8">
       <article
         v-for="plan in plans"
@@ -91,6 +96,18 @@ interface RazorpayOptions {
   order_id: string
   handler: (response: RazorpayHandlerResponse) => void
   notes?: Record<string, string>
+  config?: {
+    display?: {
+      blocks?: Record<string, {
+        name: string
+        instruments: Array<Record<string, string | string[]>>
+      }>
+      sequence?: string[]
+      preferences?: {
+        show_default_blocks?: boolean
+      }
+    }
+  }
   theme?: {
     color?: string
   }
@@ -184,7 +201,28 @@ const payWithRazorpay = async (plan: PricingPlan) => {
       order_id: order.orderId,
       notes: {
         plan: plan.name,
-        thumbnailId: selectedThumbnail.value
+        thumbnailId: selectedThumbnail.value,
+        supportedMethods: 'upi,card,netbanking,wallet'
+      },
+      config: {
+        display: {
+          blocks: {
+            upiPreferred: {
+              name: 'Pay by UPI',
+              instruments: [
+                {
+                  method: 'upi',
+                  flows: ['intent', 'qr'],
+                  apps: ['google_pay', 'phonepe']
+                }
+              ]
+            }
+          },
+          sequence: ['block.upiPreferred', 'upi', 'card', 'netbanking', 'wallet'],
+          preferences: {
+            show_default_blocks: true
+          }
+        }
       },
       theme: {
         color: '#ff4d5a'

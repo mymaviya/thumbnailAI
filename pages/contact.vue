@@ -20,7 +20,7 @@
       <div class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
         <h2 class="text-xl font-black text-ink">Support Requests</h2>
         <p class="mt-3 leading-7 text-slate-600">
-          For payment or download issues, include your Razorpay payment ID, order ID, selected plan, thumbnail ID if available, and the email or phone number used during payment.
+          For payment or download issues, include your Razorpay payment ID, order ID, selected plan, payment method such as UPI/card/netbanking if known, thumbnail ID if available, and the email or phone number used during payment.
         </p>
         <div class="mt-6 grid gap-4 sm:grid-cols-2">
           <article v-for="item in supportTopics" :key="item.title" class="rounded-lg border border-slate-200 p-4">
@@ -52,7 +52,7 @@ const contactDetails = [
 const supportTopics = [
   {
     title: 'Payment Help',
-    body: 'Contact us if your payment was deducted but the HD download did not unlock.'
+    body: 'Contact us if your Razorpay or UPI payment was deducted but the HD download did not unlock.'
   },
   {
     title: 'Download Help',

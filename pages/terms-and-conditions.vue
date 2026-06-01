@@ -9,7 +9,7 @@
     <section class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
       <div class="space-y-8 rounded-lg border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
         <div>
-          <p class="text-sm font-bold uppercase tracking-wide text-coral">Last updated: May 22, 2026</p>
+          <p class="text-sm font-bold uppercase tracking-wide text-coral">Last updated: June 1, 2026</p>
           <p class="mt-3 leading-7 text-slate-600">
             By accessing or using AI Thumbnail Maker, a product operated by Maviya IT Services, you agree to these Terms and Conditions. If you do not agree, you should not use the service.
           </p>
@@ -50,11 +50,15 @@ const sections = [
   },
   {
     title: 'Payments and Downloads',
-    body: 'Paid plans unlock watermark-free HD downloads according to the selected plan. Prices, features, and availability may change. Payment verification must be completed before paid download access is granted.'
+    body: 'Paid plans unlock watermark-free HD downloads according to the selected plan. Payments are processed through Razorpay Checkout and may support UPI, cards, netbanking, wallets, or other methods enabled on our Razorpay account. Payment verification must be completed before paid download access is granted.'
+  },
+  {
+    title: 'UPI Payments',
+    body: 'UPI payments are handled by Razorpay and supported UPI apps or banks. You must complete any UPI Intent, QR, or app approval flow shown by Razorpay. We do not ask for or store your UPI PIN. If Razorpay, your bank, or your UPI app marks a payment as pending or failed, download access is provided only after successful verification.'
   },
   {
     title: 'Refunds',
-    body: 'Because downloads and digital access may be delivered immediately after payment, purchases are generally non-refundable unless required by law or approved by support for a verified billing or technical issue.'
+    body: 'Because downloads and digital access may be delivered immediately after payment, purchases are generally non-refundable unless required by law or approved by support for a verified billing, duplicate payment, UPI deduction without access, or technical delivery issue.'
   },
   {
     title: 'Prohibited Activities',
